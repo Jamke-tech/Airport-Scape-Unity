@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheType: 2
-  lastUpdatedAtString: 2020-12-31T10:08:50.154+01:00
-  initializedAtString: 2020-12-31T10:08:28.031+01:00
-  localBranches:
-  - name: master
-    tracking: origin/master
+  lastUpdatedAtString: 2020-12-31T10:19:45.153+01:00
+  initializedAtString: 2020-12-31T10:18:55.114+01:00
+  localBranches: []
   remoteBranches:
   - name: origin/master
     tracking: '[None]'
@@ -30,14 +28,8 @@ MonoBehaviour:
     function: 0
     token: 
   localConfigBranches:
-    keys:
-    - master
-    values:
-    - name: master
-      remote:
-        name: origin
-        url: https://github.com/Jamke-tech/Airport-Scape-Unity.git
-      trackingBranch: master
+    keys: []
+    values: []
   remoteConfigBranches:
     keys:
     - origin
