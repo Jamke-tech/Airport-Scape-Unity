@@ -64,7 +64,7 @@ public class BoardManager : MonoBehaviour
         + "#C                 V#V                 #\r\n"
         + "#                   #                  #\r\n"
         + "#                  V#V                 #\r\n"
-        + "#                   #                  #\r\n"
+        + "#         i         #                  #\r\n"
         + "#C                 b#V                 #\r\n"
         + "#                 Cp#p                 #\r\n"
         + "#                   #vvvvvvvvvvv  vvvvv#\r\n"

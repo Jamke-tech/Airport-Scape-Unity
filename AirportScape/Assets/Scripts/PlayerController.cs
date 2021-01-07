@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         inverseMoveTime = 1f / moveTime;
         velocidad = 5;
-        //joy =GameObject.FindWithTag("Joystick") as Joystick;
+        joy = GameObject.FindWithTag("Joystick").GetComponent(typeof(Joystick)) as Joystick;
+
     }
 
     private void OnDisable()
@@ -42,13 +43,13 @@ public class PlayerController : MonoBehaviour
         float horizontal = 0;
         float vertical = 0;
 
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
+        //horizontal = Input.GetAxisRaw("Horizontal");
+        //vertical = Input.GetAxisRaw("Vertical");
 
         //Con joystick
 
-        //horizontal = joy.Horizontal;
-       // vertical = joy.Vertical;
+        horizontal = joy.Horizontal;
+        vertical = joy.Vertical;
 
 
 
@@ -56,10 +57,10 @@ public class PlayerController : MonoBehaviour
         
         if (horizontal != 0 || vertical != 0)//mirem si ens estem intentant moure
         {
-            if (horizontal != 0)
-                vertical = 0;
-            if (vertical != 0)
-                horizontal = 0;
+            //if (horizontal != 0)
+               // vertical = 0;
+            //if (vertical != 0)
+               // horizontal = 0;
 
             StartCoroutine(Movement(new Vector3(horizontal, vertical, 0f)));
 
