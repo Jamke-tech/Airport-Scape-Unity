@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     
     public float moveTime = 0.1f;
+    public float restartDelay = 1f;
     public int velocidad;
     public LayerMask blockinLayer; // per veure si el espai on ens movem esta ocupat o no 
 
@@ -17,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private float inverseMoveTime;
 
     public Joystick joy;
+    
 
     // Start is called before the first frame update
     public void Start()
@@ -26,8 +30,9 @@ public class PlayerController : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
         inverseMoveTime = 1f / moveTime;
-        velocidad = 5;
+        velocidad = 30;
         joy = GameObject.FindWithTag("Joystick").GetComponent(typeof(Joystick)) as Joystick;
+        
 
     }
 
@@ -38,80 +43,85 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        float horizontal = 0;
-        float vertical = 0;
-
-        //horizontal = Input.GetAxisRaw("Horizontal");
-        //vertical = Input.GetAxisRaw("Vertical");
-
-        //Con joystick
-
-        horizontal = joy.Horizontal;
-        vertical = joy.Vertical;
-
-
-
-
-        
-        if (horizontal != 0 || vertical != 0)//mirem si ens estem intentant moure
+        if (!GameManager.instance.doingSetup)
         {
-            //if (horizontal != 0)
-               // vertical = 0;
-            //if (vertical != 0)
-               // horizontal = 0;
 
-            StartCoroutine(Movement(new Vector3(horizontal, vertical, 0f)));
+            float horizontal = 0;
+            float vertical = 0;
 
-            /*Move(horizontal, vertical);
-            if (hit.transform != null)
-                Touch(hit);*/
-        }
+            //horizontal = Input.GetAxisRaw("Horizontal");
+            //vertical = Input.GetAxisRaw("Vertical");
 
-        //fEM SALTAR ELS TRIGGERS PER LES ANIMACIONS DEL PERSONATGE
+            //Con joystick
 
-        if (horizontal < 0)
-        {
-            animator.SetBool("Left",true);
-            animator.SetBool("Right", false);
-            animator.SetBool("Front", false);
-            animator.SetBool("Back", false);
+            horizontal = joy.Horizontal;
+            vertical = joy.Vertical;
 
-        }
-        else if (horizontal > 0)
-        {
-            animator.SetBool("Left", false);
-            animator.SetBool("Right", true);
-            animator.SetBool("Front", false);
-            animator.SetBool("Back", false);
-        }
-        else if (vertical > 0)
-        {
-            animator.SetBool("Left", false);
-            animator.SetBool("Right", false);
-            animator.SetBool("Front", false);
-            animator.SetBool("Back", true);
-        }
-        else if (vertical < 0)
-        {
-            animator.SetBool("Left", false);
-            animator.SetBool("Right", false);
-            animator.SetBool("Front", true);
-            animator.SetBool("Back", false);
-        }
-        else
-        {
-            animator.SetBool("Left", false);
-            animator.SetBool("Right", false);
-            animator.SetBool("Front", false);
-            animator.SetBool("Back", false);
 
+
+
+
+            if (horizontal != 0 || vertical != 0)//mirem si ens estem intentant moure
+            {
+                //if (horizontal != 0)
+                // vertical = 0;
+                //if (vertical != 0)
+                // horizontal = 0;
+
+                StartCoroutine(Movement(new Vector3(horizontal, vertical, 0f)));
+
+                /*Move(horizontal, vertical);
+                if (hit.transform != null)
+                    Touch(hit);*/
+            }
+
+            //fEM SALTAR ELS TRIGGERS PER LES ANIMACIONS DEL PERSONATGE
+
+            if (horizontal < 0)
+            {
+                animator.SetBool("Left", true);
+                animator.SetBool("Right", false);
+                animator.SetBool("Front", false);
+                animator.SetBool("Back", false);
+
+            }
+            else if (horizontal > 0)
+            {
+                animator.SetBool("Left", false);
+                animator.SetBool("Right", true);
+                animator.SetBool("Front", false);
+                animator.SetBool("Back", false);
+            }
+            else if (vertical > 0)
+            {
+                animator.SetBool("Left", false);
+                animator.SetBool("Right", false);
+                animator.SetBool("Front", false);
+                animator.SetBool("Back", true);
+            }
+            else if (vertical < 0)
+            {
+                animator.SetBool("Left", false);
+                animator.SetBool("Right", false);
+                animator.SetBool("Front", true);
+                animator.SetBool("Back", false);
+            }
+            else
+            {
+                animator.SetBool("Left", false);
+                animator.SetBool("Right", false);
+                animator.SetBool("Front", false);
+                animator.SetBool("Back", false);
+
+            }
         }
 
 
 
     }
+
 
     protected IEnumerator Movement(Vector3 inputplayer)
     {
@@ -119,16 +129,7 @@ public class PlayerController : MonoBehaviour
 
         yield return null;
     }
-    /*public void Touch(RaycastHit2D hit)
-    {
-        if (hit.collider.tag == "Enemy")
-        {
-            LooseTime(hit.collider.damage);
-        }
-            
 
-            Debug.Log(hit.collider.name);
-    }*/
     public void LooseTime(int timeLost)
     {
         GameManager.instance.playerTime = GameManager.instance.playerTime - timeLost;
@@ -141,19 +142,47 @@ public class PlayerController : MonoBehaviour
 
         if(collision.gameObject.tag == "Cleaner")
         {
-            LooseTime(10);//Daño de la limpieza
+            GameManager.instance.PlayerSeen("Whatch your steps!!! WET FLOOR ", 0, 10, collision.gameObject, 5);
         }
         if(collision.gameObject.tag == "Thief")
         {
-            //nos roba algo del inventario
+
+            GameManager.instance.PlayerSeen("JAJAJAJAJA I stole from you 10 Bugs", 10, 2, collision.gameObject, 5);
+
         }
         if (collision.gameObject.tag == "Shopper")
 
         {
-            //Nos hace perder mucho tiempo y podemos hacer que salgo algo de texto
+            GameManager.instance.PlayerSeen("Ei!! Be Careful I'm here ", 0, 5, collision.gameObject, 5);
 
 
         }
+        if (collision.gameObject.tag =="Secret")
+
+        {
+            GameManager.instance.PlayerSeen("You have discovered the secrets of this airport", 0, 0, collision.gameObject, 5);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Next")
+        {
+            Invoke("NextLevel", restartDelay);
+
+        }
+
+
+   
+    }
+    private void NextLevel()
+    {
+        SceneManager.LoadScene(0);
     }
 
+
+
+    private void LooseMoney(int moneyLost)
+    {
+        GameManager.instance.playerMoney = GameManager.instance.playerMoney - moneyLost;
+    }
 }

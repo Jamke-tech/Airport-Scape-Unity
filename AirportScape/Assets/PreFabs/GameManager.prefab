@@ -44,11 +44,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f89b6bf0e93c07844842afa39c6a2535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelStartDelay: 3
+  doingSetup: 0
   boardScript: {fileID: 0}
   follwingCamera: {fileID: 0}
   zone: 1
   playerTime: 120
+  playerMoney: 1000
+  playerName: Jaume Tabernero
   turnDelay: 0.1
+  textTime: {fileID: 0}
+  textMoney: {fileID: 0}
+  textInfo: {fileID: 0}
+  tiempo: 0
+  enemyQuote: 
 --- !u!114 &3344710380918013269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,3 +109,5 @@ MonoBehaviour:
   secretWall: {fileID: 5432660658672684247, guid: f1395e7d21b40fd47b8c8b6071d6c77b,
     type: 3}
   fence: {fileID: 7955030711698851217, guid: 2ee79e6f208c4754bba9aa5d44f66f9a, type: 3}
+  nextLevelSignal: {fileID: 575497123051052994, guid: e7efd2f524cb34b45841ccf494a27d7a,
+    type: 3}

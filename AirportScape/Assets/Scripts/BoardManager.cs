@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using UnityEditor;
 
 public class BoardManager : MonoBehaviour
 {
@@ -38,6 +37,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] companys;
     public GameObject secretWall;
     public GameObject fence;
+    public GameObject nextLevelSignal;
 
     private GameObject mainCamera;
 
@@ -53,30 +53,30 @@ public class BoardManager : MonoBehaviour
     void BoardSetup()
     {
         GameObject board = new GameObject("Board");
-        ObjectFactory.AddComponent<CompositeCollider2D>(board);
+        board.AddComponent(typeof(CompositeCollider2D));
         boardHolder = board.transform;
         boardHolder.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GameObject playerinstance = new GameObject("Player");
         String mapa = "40 20\r\n"
         + "########################################\r\n"
         + "#        a          S                  #\r\n"
-        + "#                   #                  #\r\n"
+        + "#                   #              P   #\r\n"
         + "#C                 V#V                 #\r\n"
         + "#                   #                  #\r\n"
         + "#                  V#V                 #\r\n"
         + "#         i         #                  #\r\n"
         + "#C                 b#V                 #\r\n"
-        + "#                 Cp#p                 #\r\n"
+        + "#                 Cp#p                I#\r\n"
         + "#                   #vvvvvvvvvvv  vvvvv#\r\n"
         + "#                   #                  #\r\n"
-        + "#                   #        I         #\r\n"
+        + "#                   #                  #\r\n"
         + "# T               Cb#b                 #\r\n"
         + "# B B B B B B   B  V#V        P        #\r\n"
         + "#           C       #                  #\r\n"
         + "# B B B   B B B B  V#V                 #\r\n"
         + "#C                  #                  #\r\n"
         + "# B B B B B B B B  V#V                 #\r\n"
-        + "#                   #                  #\r\n"
+        + "#                   #                 E#\r\n"
         + "########################################\r\n";
 
         mapa = mapa.Replace("\r\n", "\n");
@@ -151,6 +151,11 @@ public class BoardManager : MonoBehaviour
                         GameObject toInstantiateCompanys = companys[Random.Range(0, companys.Length)];
                         GameObject instance9 = Instantiate(toInstantiateCompanys, new Vector3(x, rows - y, 0f), Quaternion.identity) as GameObject;
                         instance9.transform.SetParent(boardHolder);
+                        intantiateFloor(x, rows - y, rows, columns);
+                        break;
+                    case 'E'://Exit to next level
+                        GameObject instanceexit =Instantiate(nextLevelSignal, new Vector3(x, rows - y, 0f), Quaternion.identity) as GameObject;
+                        instanceexit.transform.SetParent(boardHolder);
                         intantiateFloor(x, rows - y, rows, columns);
                         break;
 

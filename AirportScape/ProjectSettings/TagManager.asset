@@ -9,6 +9,14 @@ TagManager:
   - Thief
   - Shopper
   - Joystick
+  - Time
+  - Money
+  - Info
+  - Secret
+  - UI
+  - Levels
+  - Initial
+  - Next
   layers:
   - Default
   - TransparentFX
