@@ -75,7 +75,8 @@ public class Shopper : MonoBehaviour
                     {
                         interaction = true;
                         int numRand = Random.Range(0, vectorOfQuotes.Length);
-                        GameManager.instance.PlayerSeen(vectorOfQuotes[numRand], moneySpend[numRand], timeSpend, gameObject, tiempo);
+                        GameManager.instance.PlayerSeen(vectorOfQuotes[numRand], moneySpend[numRand], timeSpend, gameObject, 3);
+                        SoundManager.instance.PlaySingleSound();
                     }
                 }
 

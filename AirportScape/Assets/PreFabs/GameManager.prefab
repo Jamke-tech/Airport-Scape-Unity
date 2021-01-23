@@ -48,9 +48,9 @@ MonoBehaviour:
   doingSetup: 0
   boardScript: {fileID: 0}
   follwingCamera: {fileID: 0}
-  zone: 1
-  playerTime: 120
-  playerMoney: 1000
+  zone: 0
+  playerTime: 0
+  playerMoney: 0
   playerName: Jaume Tabernero
   turnDelay: 0.1
   textTime: {fileID: 0}

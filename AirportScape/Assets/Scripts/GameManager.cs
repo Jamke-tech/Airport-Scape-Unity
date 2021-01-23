@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,21 +9,32 @@ public class GameManager : MonoBehaviour
 
     //Parametros de los transitions levels
     public float levelStartDelay = 3f;//time between levels
+
+
+
     private Text levelText;
     private Text nameUser;
     private Text timeUser;
     private Text from;
     private GameObject levelImage;
     public bool doingSetup;
-    
+    private GameObject dialogImage;
+    private Text questionText;
+    private int numeroQuestion = 0;
+
+    private List<string> questionAvailable = new List<string>();
+
+    List<string> questions = new List<string>();
+
+
     //Parametros del juego
     public BoardManager boardScript;
     public CameraFollow follwingCamera;
     public static GameManager instance = null;
-    public int zone; //Pedir al usuario la zona 
-    public int playerTime; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
-    public int playerMoney;
-    public string playerName;
+    private int level; //Pedir al usuario la zona 
+    public int playerTimeAvailable = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
+    public int playerMoneyWin;
+    private string playerName;
     public float turnDelay = 0.1f;
     private List<Cleaner> cleaners;
 
@@ -49,23 +61,34 @@ public class GameManager : MonoBehaviour
 
         cleaners = new List<Cleaner>();
         boardScript = GetComponent<BoardManager>();
-
+        questionAvailable.Add("Pregunta de Prueba");
+        questionAvailable.Add("Pregunta de Prueba2");
+        questionAvailable.Add("Pregunta de Prueba3");
+        questionAvailable.Add("Pregunta de Prueba4");
+        questionAvailable.Add("Pregunta de Prueba5");
+        questionAvailable.Add("Pregunta de Prueba6");
         
         InitGame();
 
     }
     private void Start()
     {
+        //Tenemos que poner las list de las preguntas
+
         //Ponemos los valores de el jugador
-        zone = 1; //Pedir al usuario la zona 
-        playerTime = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
-        playerMoney = 1000;
+        level = 1; //Pedir al usuario la zona 
+        playerTimeAvailable = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
+        playerMoneyWin = 1000;
         playerName = "Jaume Tabernero";
 
     }
     private void OnLevelWasLoaded(int level)
     {
-        zone++;
+        this.level++;
+
+        //Pedir a android que guarde los parametros que tenemos ahora
+
+
         tiempo = 5;
         InitGame();
     }
@@ -80,16 +103,16 @@ public class GameManager : MonoBehaviour
     {
         doingSetup = true;
         levelImage = GameObject.Find("LevelImage");
-        levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        nameUser = GameObject.Find("NameUser").GetComponent<Text>();
-        timeUser = GameObject.Find("BoardingTime").GetComponent<Text>();
-        from = GameObject.Find("From").GetComponent<Text>();
+        levelText = GameObject.Find("LevelText").GetComponent<Text>() as Text;
+        nameUser = GameObject.Find("NameUser").GetComponent<Text>() as Text;
+        timeUser = GameObject.Find("BoardingTime").GetComponent<Text>() as Text;
+        from = GameObject.Find("From").GetComponent<Text>() as Text;
 
-        if (zone==1 || zone==4 || zone == 7)//boardng zone
+        if (level==1 || level==4 || level == 7)//boardng zone
         {
             levelText.text = "Entrance Level";
         }
-        else if(zone == 2 || zone == 5 || zone == 8)//Security zone
+        else if(level == 2 || level == 5 || level == 8)//Security zone
         {
             levelText.text = "Security Level";
         }
@@ -98,11 +121,11 @@ public class GameManager : MonoBehaviour
             levelText.text = "Boarding Level";
         }
 
-        if (zone <= 3)
+        if (level <= 3)
         {
             from.text = "Frankfurt";
         }
-        else if (zone<=6 && zone>3)
+        else if (level<=6 && level>3)
         {
             from.text = "NEW YORK";
         }
@@ -112,7 +135,7 @@ public class GameManager : MonoBehaviour
         }
 
         nameUser.text = "elJefe";
-        timeUser.text = playerTime.ToString();
+        timeUser.text = playerTimeAvailable.ToString();
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
         
@@ -120,8 +143,8 @@ public class GameManager : MonoBehaviour
         textMoney = GameObject.FindWithTag("Money").GetComponent(typeof(Text)) as Text;
         textInfo = GameObject.FindWithTag("Info").GetComponent(typeof(Text)) as Text;
 
-        textTime.text = playerTime.ToString();
-        textMoney.text = playerMoney.ToString();
+        textTime.text = playerTimeAvailable.ToString();
+        textMoney.text = playerMoneyWin.ToString();
         textInfo.text = "";
 
 
@@ -158,9 +181,14 @@ public class GameManager : MonoBehaviour
         if (!doingSetup)
         {
             StartCoroutine(MoveEnemies());
-            textTime.text = playerTime.ToString();
-            textMoney.text = playerMoney.ToString();
+            textTime.text = playerTimeAvailable.ToString();
+            textMoney.text = playerMoneyWin.ToString();
             textInfo.text = enemyQuote;
+
+            if (playerTimeAvailable <= 0)
+                GameOver();
+
+
         }
        
     }
@@ -176,7 +204,7 @@ public class GameManager : MonoBehaviour
         {
             if (tiempo <= 0)
             {
-                playerTime = playerTime - 1;
+                playerTimeAvailable = playerTimeAvailable - 1;
                 tiempo = 5;
             }
             else
@@ -184,7 +212,7 @@ public class GameManager : MonoBehaviour
                 tiempo = tiempo - 1 * Time.deltaTime;
             }
 
-            if(playerTime<=0)
+            if(playerTimeAvailable<=0)
             {
                 GameOver();
             }
@@ -234,20 +262,93 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     public void PlayerSeen(string Quote,int moneyspend,int timespend, GameObject whoSees, float tiempo)
     {
         StartCoroutine(ShowText(Quote, whoSees,tiempo));
-        playerTime = playerTime - timespend;
+        playerTimeAvailable = playerTimeAvailable - timespend;
         
-        if (playerMoney - moneyspend <= 0)
+        if (playerMoneyWin - moneyspend <= 0)
         {
-            playerMoney = 0;
+            playerMoneyWin = 0;
         }
         else
         {
-            playerMoney = playerMoney - moneyspend;
+            playerMoneyWin = playerMoneyWin - moneyspend;
         }
+    }
+
+    public void SecurityOn()
+    {
+        doingSetup = true; //Lo ponemos para no permitir que el jugador entre i salga de seguridad
+        dialogImage = GameObject.FindGameObjectWithTag("Dialog");
+        dialogImage.SetActive(true);
+        //inixializamos 5 de las preguntas del vector de preguntas que tenemos;
+        List<string> questionToChoose = questionAvailable;
+        for (int i=0; i<5; i++)
+        {
+            int randpos = UnityEngine.Random.Range(0, questionToChoose.Count);
+            Debug.Log(randpos);
+            questions.Add(questionToChoose[randpos]);
+            questionToChoose.RemoveAt(randpos);
+
+        }
+        
+        ShowQuestion(0);
+    }
+
+    public void ShowQuestion(int numQuestion)
+    {
+        questionText = GameObject.Find("Question").GetComponent<Text>() as Text;
+        questionText.text = questions[numQuestion];
+    }
+
+    public void EndSecurity()
+    {
+        this.level++;
+        dialogImage.SetActive(false);
+        doingSetup = false;
+        InitGame();
+
+    }
+
+
+    internal void YesPulsed()
+    {
+        //Hem de fer algo amb el temps per perdre de manera aleatoria segons supicious
+
+        if (numeroQuestion + 1 < 5)
+        {
+            numeroQuestion++;
+            ShowQuestion(numeroQuestion);
+        }
+        else
+        {
+            EndSecurity();
+        }
+
+
+    }
+
+    internal void NoPulsed()
+    {
+        //Hem de fer algo per el temps de perdre de manera aleatoria temps
+
+        
+        
+        
+        
+        if (numeroQuestion + 1 < 5)
+        {
+            numeroQuestion++;
+            ShowQuestion(numeroQuestion);
+        }
+        else
+        {
+            EndSecurity();
+        }
+
+
+
     }
 
 

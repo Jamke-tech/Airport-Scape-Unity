@@ -20,13 +20,17 @@ public class PlayerController : MonoBehaviour
     private float inverseMoveTime;
 
     public Joystick joy;
-    
+
+
+
+
+
 
     // Start is called before the first frame update
     public void Start()
     {
         animator = GetComponent<Animator>();
-        timeRemaining = GameManager.instance.playerTime;
+        timeRemaining = GameManager.instance.playerTimeAvailable;
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
         inverseMoveTime = 1f / moveTime;
@@ -38,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.instance.playerTime = timeRemaining;
+        GameManager.instance.playerTimeAvailable = timeRemaining;
 
     }
 
@@ -132,9 +136,9 @@ public class PlayerController : MonoBehaviour
 
     public void LooseTime(int timeLost)
     {
-        GameManager.instance.playerTime = GameManager.instance.playerTime - timeLost;
+        GameManager.instance.playerTimeAvailable = GameManager.instance.playerTimeAvailable - timeLost;
         //Saltar animacion de daño
-        Debug.Log(GameManager.instance.playerTime);
+        Debug.Log(GameManager.instance.playerTimeAvailable);
     }
 
     void OnCollisionEnter2D (Collision2D collision)
@@ -143,17 +147,22 @@ public class PlayerController : MonoBehaviour
         if(collision.gameObject.tag == "Cleaner")
         {
             GameManager.instance.PlayerSeen("Whatch your steps!!! WET FLOOR ", 0, 10, collision.gameObject, 5);
+            SoundManager.instance.PlaySingleSound();
+
+
         }
         if(collision.gameObject.tag == "Thief")
         {
 
             GameManager.instance.PlayerSeen("JAJAJAJAJA I stole from you 10 Bugs", 10, 2, collision.gameObject, 5);
+            SoundManager.instance.PlaySingleSound();
 
         }
         if (collision.gameObject.tag == "Shopper")
 
         {
             GameManager.instance.PlayerSeen("Ei!! Be Careful I'm here ", 0, 5, collision.gameObject, 5);
+            SoundManager.instance.PlaySingleSound();
 
 
         }
@@ -167,8 +176,12 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "Next")
         {
-            Invoke("NextLevel", restartDelay);
-
+            //Invoke("NextLevel", restartDelay);
+            Invoke("SecurityOn", restartDelay);
+        }
+        else if (other.tag == "Security")
+        {
+            Invoke("SecurityOn", restartDelay);
         }
 
 
@@ -178,11 +191,15 @@ public class PlayerController : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+    private void SecurityOn()
+    {
+        GameManager.instance.SecurityOn();
+    }
 
 
 
     private void LooseMoney(int moneyLost)
     {
-        GameManager.instance.playerMoney = GameManager.instance.playerMoney - moneyLost;
+        GameManager.instance.playerMoneyWin = GameManager.instance.playerMoneyWin - moneyLost;
     }
 }
