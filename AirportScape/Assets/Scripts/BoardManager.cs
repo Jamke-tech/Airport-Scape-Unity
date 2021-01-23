@@ -76,7 +76,7 @@ public class BoardManager : MonoBehaviour
         + "# B B B   B B B B  V#V                 #\r\n"
         + "#C                  #                  #\r\n"
         + "# B B B B B B B B  V#V                 #\r\n"
-        + "#                   #                 E#\r\n"
+        + "#                   #                E #\r\n"
         + "########################################\r\n";
 
         mapa = mapa.Replace("\r\n", "\n");
