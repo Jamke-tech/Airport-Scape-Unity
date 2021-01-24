@@ -176,12 +176,16 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "Next")
         {
-            //Invoke("NextLevel", restartDelay);
-            Invoke("SecurityOn", restartDelay);
+            Invoke("NextLevel", restartDelay);
+            
         }
         else if (other.tag == "Security")
         {
             Invoke("SecurityOn", restartDelay);
+        }
+        else if (other.tag == "Final")
+        {
+            Invoke("FinalGame", restartDelay);
         }
 
 
@@ -194,6 +198,10 @@ public class PlayerController : MonoBehaviour
     private void SecurityOn()
     {
         GameManager.instance.SecurityOn();
+    }
+    private void FinalGame()
+    {
+        GameManager.instance.FinalGame();
     }
 
 

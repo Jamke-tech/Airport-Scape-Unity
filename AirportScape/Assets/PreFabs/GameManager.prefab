@@ -48,10 +48,8 @@ MonoBehaviour:
   doingSetup: 0
   boardScript: {fileID: 0}
   follwingCamera: {fileID: 0}
-  zone: 0
-  playerTime: 0
-  playerMoney: 0
-  playerName: Jaume Tabernero
+  playerTimeAvailable: 120
+  playerMoneyWin: 0
   turnDelay: 0.1
   textTime: {fileID: 0}
   textMoney: {fileID: 0}
@@ -88,6 +86,12 @@ MonoBehaviour:
   thiefSprite: {fileID: 6246450978322330396, guid: 0ac7d28b89129c54483ce668d2bccf4d,
     type: 3}
   shopperSprite: {fileID: 5724172264406599438, guid: 894f8f8bfdd46c34cad5c239e311093b,
+    type: 3}
+  securityManSprite: {fileID: 7072656804019877919, guid: f091db1eb8400c04ea00136314ffe2c5,
+    type: 3}
+  securityPointSprite: {fileID: 6475627972666305000, guid: 73e98fd977eb82943a1e1fdab62e20fe,
+    type: 3}
+  securitySignalSprite: {fileID: 7402751521941713457, guid: cef2f43b120eaa24ebf7b55662a40274,
     type: 3}
   plants:
   - {fileID: 1275217245501603514, guid: e76e75eb222cbb343a7e9fc629443f83, type: 3}

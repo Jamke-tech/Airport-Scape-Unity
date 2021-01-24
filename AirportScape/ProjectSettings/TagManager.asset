@@ -17,6 +17,8 @@ TagManager:
   - Levels
   - Initial
   - Next
+  - Dialog
+  - Security
   layers:
   - Default
   - TransparentFX

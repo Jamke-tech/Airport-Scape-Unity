@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -10,7 +11,7 @@ public class GameManager : MonoBehaviour
     //Parametros de los transitions levels
     public float levelStartDelay = 3f;//time between levels
 
-
+    public int randomanswer;
 
     private Text levelText;
     private Text nameUser;
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
     public BoardManager boardScript;
     public CameraFollow follwingCamera;
     public static GameManager instance = null;
-    private int level; //Pedir al usuario la zona 
+    public int level; //Pedir al usuario la zona 
     public int playerTimeAvailable = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
     public int playerMoneyWin;
     private string playerName;
@@ -61,25 +62,50 @@ public class GameManager : MonoBehaviour
 
         cleaners = new List<Cleaner>();
         boardScript = GetComponent<BoardManager>();
-        questionAvailable.Add("Pregunta de Prueba");
-        questionAvailable.Add("Pregunta de Prueba2");
-        questionAvailable.Add("Pregunta de Prueba3");
-        questionAvailable.Add("Pregunta de Prueba4");
-        questionAvailable.Add("Pregunta de Prueba5");
-        questionAvailable.Add("Pregunta de Prueba6");
+        questionAvailable.Add("Do you live with your parents?");
+        questionAvailable.Add("Would you be able to forgive the betrayal of a friend?");
+        questionAvailable.Add("Do you feel that you are a brave person?");
+        questionAvailable.Add("Have you ever had your hand or tongue stuck to something?");
+        questionAvailable.Add("Have you ever kissed or been kissed in the rain?");
+        questionAvailable.Add("Have you ever left the country?");
+        questionAvailable.Add("Do you usually follow your brain more than the heart?");
+        questionAvailable.Add("Have you ever fallen asleep at school or work?");
+        questionAvailable.Add("Have your parents caught a lie of great caliber?");
+        questionAvailable.Add("Have you got in the car of people you just met?");
+        questionAvailable.Add("Do you fear snakes?");
+        questionAvailable.Add("Have you ever been arrested?");
+        questionAvailable.Add("Do you consider yourself an intelligent person?");
+        questionAvailable.Add("Do you like DSA subject?");
+        questionAvailable.Add("Have you ever been broken or have you broken your heart?");
+        questionAvailable.Add("Do you know how to play at least one musical instrument?");
+        questionAvailable.Add("Is programming the best activity in the world?");
+        questionAvailable.Add("Would you share your last piece of food with me?");
+        questionAvailable.Add("Do you usually be friends with your ex?");
+        questionAvailable.Add("If it were possible to colonize Mars while we are still alive, would you go to a colony?");
+
+        levelImage = GameObject.Find("LevelImage");
+
+        levelText = GameObject.Find("LevelText").GetComponent<Text>() as Text;
+        nameUser = GameObject.Find("NameUser").GetComponent<Text>() as Text;
+        timeUser = GameObject.Find("BoardingTime").GetComponent<Text>() as Text;
+        from = GameObject.Find("From").GetComponent<Text>() as Text;
+        Debug.Log("Entro Awake");
+        SetParameters();
         
         InitGame();
 
     }
-    private void Start()
+    private void SetParameters()
     {
         //Tenemos que poner las list de las preguntas
-
+        Debug.Log("Entro Start");
         //Ponemos los valores de el jugador
         level = 1; //Pedir al usuario la zona 
         playerTimeAvailable = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
         playerMoneyWin = 1000;
         playerName = "Jaume Tabernero";
+        
+
 
     }
     private void OnLevelWasLoaded(int level)
@@ -101,8 +127,12 @@ public class GameManager : MonoBehaviour
     
     void InitGame()
     {
-        doingSetup = true;
+        doingSetup = true;//Para evitar que las cosas se muevan i perdaos puntos ni tiempo
+
+        dialogImage = GameObject.Find("DialogImage");
+        dialogImage.SetActive(false);
         levelImage = GameObject.Find("LevelImage");
+
         levelText = GameObject.Find("LevelText").GetComponent<Text>() as Text;
         nameUser = GameObject.Find("NameUser").GetComponent<Text>() as Text;
         timeUser = GameObject.Find("BoardingTime").GetComponent<Text>() as Text;
@@ -134,7 +164,7 @@ public class GameManager : MonoBehaviour
             from.text = "Moscow";
         }
 
-        nameUser.text = "elJefe";
+        nameUser.text = playerName;
         timeUser.text = playerTimeAvailable.ToString();
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
@@ -280,11 +310,11 @@ public class GameManager : MonoBehaviour
     public void SecurityOn()
     {
         doingSetup = true; //Lo ponemos para no permitir que el jugador entre i salga de seguridad
-        dialogImage = GameObject.FindGameObjectWithTag("Dialog");
+        //dialogImage = GameObject.Find("DialogImage");
         dialogImage.SetActive(true);
         //inixializamos 5 de las preguntas del vector de preguntas que tenemos;
         List<string> questionToChoose = questionAvailable;
-        for (int i=0; i<5; i++)
+        for (int i=0; i<4; i++)
         {
             int randpos = UnityEngine.Random.Range(0, questionToChoose.Count);
             Debug.Log(randpos);
@@ -292,7 +322,8 @@ public class GameManager : MonoBehaviour
             questionToChoose.RemoveAt(randpos);
 
         }
-        
+        questions.Add("Does the Airport Escape project deserve a 10 ?");//Esta pregunta no es random pq es la mejor
+
         ShowQuestion(0);
     }
 
@@ -300,14 +331,14 @@ public class GameManager : MonoBehaviour
     {
         questionText = GameObject.Find("Question").GetComponent<Text>() as Text;
         questionText.text = questions[numQuestion];
+        randomanswer = UnityEngine.Random.Range(0, 1);
     }
 
     public void EndSecurity()
     {
-        this.level++;
         dialogImage.SetActive(false);
         doingSetup = false;
-        InitGame();
+        SceneManager.LoadScene(0);
 
     }
 
@@ -328,14 +359,9 @@ public class GameManager : MonoBehaviour
 
 
     }
-
     internal void NoPulsed()
     {
         //Hem de fer algo per el temps de perdre de manera aleatoria temps
-
-        
-        
-        
         
         if (numeroQuestion + 1 < 5)
         {
@@ -348,6 +374,12 @@ public class GameManager : MonoBehaviour
         }
 
 
+
+    }
+
+
+    public void FinalGame()//Acciones hacer cuando finalizamos el juego
+    {
 
     }
 

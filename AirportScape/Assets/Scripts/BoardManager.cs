@@ -27,6 +27,9 @@ public class BoardManager : MonoBehaviour
     public GameObject playerSprite;
     public GameObject thiefSprite;
     public GameObject shopperSprite;
+    public GameObject securityManSprite;
+    public GameObject securityPointSprite;
+    public GameObject securitySignalSprite;
     public GameObject[] plants;
     public GameObject benchHorizontal;
     public GameObject benchVertical;
@@ -43,6 +46,8 @@ public class BoardManager : MonoBehaviour
 
     private Transform boardHolder;
     private List<Vector3> gridPositionsCleanerPart1 = new List<Vector3>(); //To places the tiles
+
+
     public void Start()
     {
         //Buscamos la camara principal para asi poder assignar el personaje
@@ -57,27 +62,69 @@ public class BoardManager : MonoBehaviour
         boardHolder = board.transform;
         boardHolder.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GameObject playerinstance = new GameObject("Player");
-        String mapa = "40 20\r\n"
-        + "########################################\r\n"
-        + "#        a          S                  #\r\n"
-        + "#                   #              P   #\r\n"
-        + "#C                 V#V                 #\r\n"
-        + "#                   #                  #\r\n"
-        + "#                  V#V                 #\r\n"
-        + "#         i         #                  #\r\n"
-        + "#C                 b#V                 #\r\n"
-        + "#                 Cp#p                I#\r\n"
-        + "#                   #vvvvvvvvvvv  vvvvv#\r\n"
-        + "#                   #                  #\r\n"
-        + "#                   #                  #\r\n"
-        + "# T               Cb#b                 #\r\n"
-        + "# B B B B B B   B  V#V        P        #\r\n"
-        + "#           C       #                  #\r\n"
-        + "# B B B   B B B B  V#V                 #\r\n"
-        + "#C                  #                  #\r\n"
-        + "# B B B B B B B B  V#V                 #\r\n"
-        + "#                   #                E #\r\n"
-        + "########################################\r\n";
+        String mapa;
+        if (GameManager.instance.level == 1)
+        {
+            mapa = "40 20\r\n"
+            + "########################################\r\n"
+            + "#        a          S                  #\r\n"
+            + "#                   #              P   #\r\n"
+            + "#C                 V#V                 #\r\n"
+            + "#                   #                  #\r\n"
+            + "#                  V#V                 #\r\n"
+            + "#         i         #                  #\r\n"
+            + "#C                 b#V                 #\r\n"
+            + "#                 Cp#p                 #\r\n"
+            + "#                   #vvvvvvvvvvv  vvvvv#\r\n"
+            + "#                   #                  #\r\n"
+            + "#                   #                  #\r\n"
+            + "# T               Cb#b                 #\r\n"
+            + "# B B B B B B   B  V#V        P        #\r\n"
+            + "#           C       #                  #\r\n"
+            + "# B B B   B B B B  V#V                 #\r\n"
+            + "#C                  #                 I#\r\n"
+            + "# B B B B B B B B  V#V                 #\r\n"
+            + "#                   #                E #\r\n"
+            + "########################################\r\n";
+        }
+        else if(GameManager.instance.level==2)
+        {
+            mapa = "15 10\r\n"
+            + "###############\r\n"
+            + "#I  s     Y  p#\r\n"
+            + "#    vvvvvvvv #\r\n"
+            + "#s            #\r\n"
+            + "#vvvvvvvvvv   #\r\n"
+            + "# p  s   B    #\r\n"
+            + "#  s         p#\r\n"
+            + "#        vvvvv#\r\n"
+            + "# Y          x#\r\n"
+            + "###############\r\n";
+        }
+        else
+        {
+            mapa = "40 20\r\n"
+            + "########################################\r\n"
+            + "#        a          S                  #\r\n"
+            + "#                   #              P   #\r\n"
+            + "#C                 V#V                 #\r\n"
+            + "#                   #                  #\r\n"
+            + "#                  V#V                 #\r\n"
+            + "#         i         #                  #\r\n"
+            + "#C                 b#V                 #\r\n"
+            + "#                 Cp#p                 #\r\n"
+            + "#                   #vvvvvvvvvvv  vvvvv#\r\n"
+            + "#                   #                  #\r\n"
+            + "#                   #                  #\r\n"
+            + "# T               Cb#b                 #\r\n"
+            + "# B B B B B B   B  V#V        P        #\r\n"
+            + "#           C       #                  #\r\n"
+            + "# B B B   B B B B  V#V                 #\r\n"
+            + "#C                  #                 I#\r\n"
+            + "# B B B B B B B B  V#V                 #\r\n"
+            + "#                   #                E #\r\n"
+            + "########################################\r\n";
+        }
 
         mapa = mapa.Replace("\r\n", "\n");
         String[] maplines = mapa.Split('\n');
@@ -174,6 +221,22 @@ public class BoardManager : MonoBehaviour
                         instanceShopper.transform.SetParent(boardHolder);
                         intantiateFloor(x, rows - y, rows, columns);
                         break;
+                    case 's': //policeMan                       
+                        GameObject instanceSecurity = Instantiate(securityManSprite, new Vector3(x, rows - y, 0f), Quaternion.identity);
+                        instanceSecurity.transform.SetParent(boardHolder);
+                        intantiateFloor(x, rows - y, rows, columns);
+                        break;
+                    case 'x': //securityPoint                     
+                        GameObject instanceSecurityPoint = Instantiate(securityPointSprite, new Vector3(x, rows - y, 0f), Quaternion.identity);
+                        instanceSecurityPoint.transform.SetParent(boardHolder);
+                        intantiateFloor(x, rows - y, rows, columns);
+                        break;
+                    case 'Y': //securitySignal                     
+                        GameObject instanceSecuritySignal = Instantiate(securitySignalSprite, new Vector3(x, rows - y, 0f), Quaternion.identity);
+                        instanceSecuritySignal.transform.SetParent(boardHolder);
+                        intantiateFloor(x, rows - y, rows, columns);
+                        break;
+
                     case 'I': //Inicio del Jugador                       
                         playerinstance = Instantiate(playerSprite, new Vector3(x, rows - y, 0f), Quaternion.identity);
                         intantiateFloor(x, rows - y, rows, columns);
