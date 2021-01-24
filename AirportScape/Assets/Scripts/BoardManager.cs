@@ -48,6 +48,8 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> gridPositionsCleanerPart1 = new List<Vector3>(); //To places the tiles
 
 
+    public String mapa;
+
     public void Start()
     {
         //Buscamos la camara principal para asi poder assignar el personaje
@@ -62,7 +64,7 @@ public class BoardManager : MonoBehaviour
         boardHolder = board.transform;
         boardHolder.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GameObject playerinstance = new GameObject("Player");
-        String mapa;
+        //String mapa;
         if (GameManager.instance.level == 1)
         {
             mapa = "40 20\r\n"

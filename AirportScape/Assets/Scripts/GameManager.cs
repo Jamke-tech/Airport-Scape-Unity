@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public int level; //Pedir al usuario la zona 
     public int playerTimeAvailable = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
     public int playerMoneyWin;
+    public int playerSuspicious;
     private string playerName;
     public float turnDelay = 0.1f;
     private List<Cleaner> cleaners;
@@ -90,13 +91,28 @@ public class GameManager : MonoBehaviour
         timeUser = GameObject.Find("BoardingTime").GetComponent<Text>() as Text;
         from = GameObject.Find("From").GetComponent<Text>() as Text;
         Debug.Log("Entro Awake");
-        SetParameters();
-        
+        #if UNITY_ANDROID
+            SetParameters();
+        #else
+            SetParametersComputer();
+        #endif
+
         InitGame();
 
     }
     private void SetParameters()
     {
+        AndroidJavaClass UnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+
+        AndroidJavaObject currentActivity = UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+        AndroidJavaObject intent = currentActivity.Call<AndroidJavaObject>("getIntent");
+
+        playerMoneyWin = int.Parse(intent.Call<String>("getStringExtra", "playerMoney"));
+        playerSuspicious = int.Parse(intent.Call<String>("getStringExtra", "playerSuspicious"));
+        level = int.Parse(intent.Call<String>("getStringExtra", "level"));
+        playerName = intent.Call<String>("getStringExtra", "playerName");
+
         //Tenemos que poner las list de las preguntas
         Debug.Log("Entro Start");
         //Ponemos los valores de el jugador
@@ -108,13 +124,17 @@ public class GameManager : MonoBehaviour
 
 
     }
+    private void SetParametersComputer()
+    {
+    }
     private void OnLevelWasLoaded(int level)
     {
+
         this.level++;
-
+       // AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.PlayGameActivity");
+        //playGameActivity.Call("SaveGame",this.level,playerTimeAvailable,false,playerSuspicious);
+               
         //Pedir a android que guarde los parametros que tenemos ahora
-
-
         tiempo = 5;
         InitGame();
     }
@@ -128,6 +148,10 @@ public class GameManager : MonoBehaviour
     void InitGame()
     {
         doingSetup = true;//Para evitar que las cosas se muevan i perdaos puntos ni tiempo
+        AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.PlayGameActivity");
+        String mapa = playGameActivity.Call<String>("GetMapa", this.level);
+        boardScript.mapa = mapa;
+
 
         dialogImage = GameObject.Find("DialogImage");
         dialogImage.SetActive(false);
@@ -157,7 +181,7 @@ public class GameManager : MonoBehaviour
         }
         else if (level<=6 && level>3)
         {
-            from.text = "NEW YORK";
+            from.text = "New York";
         }
         else
         {

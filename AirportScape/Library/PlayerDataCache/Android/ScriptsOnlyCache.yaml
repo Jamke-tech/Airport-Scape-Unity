@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - BoardManager
+    - ButtonFunctions
     - CameraFollow
     - Cleaner
     - FixedJoystick
@@ -9,6 +10,7 @@ ScriptsOnlyBuild:
     - Loader
     - PlayerController
     - Shopper
+    - SoundManager
     - Thief
     GitHub.Unity.45.dll:
     - GitHub.Unity.ApplicationCache
@@ -47,6 +49,7 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
@@ -75,6 +78,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 91
       Script: {instanceID: 0}
     - Class: 95
@@ -102,27 +109,33 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12536}
     - Class: 114
-      Script: {instanceID: 13534}
+      Script: {instanceID: 12938}
     - Class: 114
-      Script: {instanceID: 13554}
+      Script: {instanceID: 13182}
     - Class: 114
-      Script: {instanceID: 13638}
+      Script: {instanceID: 13538}
     - Class: 114
-      Script: {instanceID: 13778}
+      Script: {instanceID: 13558}
     - Class: 114
-      Script: {instanceID: 13982}
+      Script: {instanceID: 13642}
     - Class: 114
-      Script: {instanceID: 14286}
+      Script: {instanceID: 13782}
     - Class: 114
-      Script: {instanceID: 14414}
+      Script: {instanceID: 13986}
     - Class: 114
-      Script: {instanceID: 14464}
+      Script: {instanceID: 14208}
     - Class: 114
-      Script: {instanceID: 14630}
+      Script: {instanceID: 14292}
     - Class: 114
-      Script: {instanceID: 14642}
+      Script: {instanceID: 14420}
     - Class: 114
-      Script: {instanceID: 14700}
+      Script: {instanceID: 14470}
+    - Class: 114
+      Script: {instanceID: 14636}
+    - Class: 114
+      Script: {instanceID: 14648}
+    - Class: 114
+      Script: {instanceID: 14706}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -180,7 +193,7 @@ ScriptsOnlyBuild:
     className: TMP_Dropdown
   - hash:
       serializedVersion: 2
-      Hash: 2740e495fb4bd5a8f576f3a2d4f0694f
+      Hash: e56839e67672f52251ddb9c6920108a2
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Shopper
@@ -192,7 +205,7 @@ ScriptsOnlyBuild:
     className: Decoration
   - hash:
       serializedVersion: 2
-      Hash: 1ab5583f2966ee326e3e8a5adb61e7cc
+      Hash: 76061ae1b959e841a7dc2521e61e41a4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -493,9 +506,21 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ButtonFunctions
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SpriteAnimator
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Security
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -762,6 +787,12 @@ ScriptsOnlyBuild:
     className: VertexZoom
   - hash:
       serializedVersion: 2
+      Hash: a18485431d39ff6c680c35d3d64470f1
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SoundManager
+  - hash:
+      serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -780,7 +811,7 @@ ScriptsOnlyBuild:
     className: TMPro_InstructionOverlay
   - hash:
       serializedVersion: 2
-      Hash: 3fc78bdf6984fa8743c3575f7b413d7c
+      Hash: 764e6ef3bdb0f1f0cb73715deb7743fb
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -870,7 +901,7 @@ ScriptsOnlyBuild:
     className: Dropdown
   - hash:
       serializedVersion: 2
-      Hash: bc0546ef118059a1527410d8c0e1059d
+      Hash: 65e211543ef943a22d72bb4873cb5f5c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: BoardManager
@@ -906,7 +937,7 @@ ScriptsOnlyBuild:
     className: Slider
   - hash:
       serializedVersion: 2
-      Hash: 5d064456c40f7c34690dc0c9d079accc
+      Hash: 76c342040702aad0d521d4b7c1ee3f4d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Thief
@@ -925,4 +956,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: D:/4t_CARRERA/4A/DSA/PROJECT/proba.apk
+  playerPath: D:/4t_CARRERA/4A/DSA/PROJECT/UnityAndroid
