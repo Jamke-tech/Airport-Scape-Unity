@@ -9,9 +9,15 @@ public class GameManager : MonoBehaviour
 {
 
     //Parametros de los transitions levels
-    public float levelStartDelay = 3f;//time between levels
+    public float levelStartDelay = 2f;//time between levels
 
     public int randomanswer;
+    private string mapa;
+
+    private GameObject finalImage;
+    private Text finalText;
+    private GameObject congratsText;
+
 
     private Text levelText;
     private Text nameUser;
@@ -33,7 +39,7 @@ public class GameManager : MonoBehaviour
     public CameraFollow follwingCamera;
     public static GameManager instance = null;
     public int level; //Pedir al usuario la zona 
-    public int playerTimeAvailable = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
+    public int playerTimeAvailable = 200; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
     public int playerMoneyWin;
     public int playerSuspicious;
     private string playerName;
@@ -91,36 +97,61 @@ public class GameManager : MonoBehaviour
         timeUser = GameObject.Find("BoardingTime").GetComponent<Text>() as Text;
         from = GameObject.Find("From").GetComponent<Text>() as Text;
         Debug.Log("Entro Awake");
-        #if UNITY_ANDROID
-            SetParameters();
-        #else
-            SetParametersComputer();
-        #endif
-
+        
+        SetParameters();
+        
         InitGame();
 
     }
     private void SetParameters()
     {
-        AndroidJavaClass UnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaClass UnityApi = new AndroidJavaClass("com.example.log_in_java.MyUnity");
 
-        AndroidJavaObject currentActivity = UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        playerMoneyWin = UnityApi.CallStatic<int>("GetMoney");
+        level = UnityApi.CallStatic<int>("GetLevel");
+        playerSuspicious = UnityApi.CallStatic<int>("GetSuspicious");
+        playerName = UnityApi.CallStatic<String>("GetName");
+       
+        
+        AndroidJavaClass toastClass =
+            new AndroidJavaClass("android.widget.Toast");
 
-        AndroidJavaObject intent = currentActivity.Call<AndroidJavaObject>("getIntent");
+        //create an array and add params to be passed
+        object[] toastParams = new object[3];
+        AndroidJavaClass unityActivity =
+          new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        toastParams[0] =
+                     unityActivity.GetStatic<AndroidJavaObject>
+                               ("currentActivity");
+        toastParams[1] = playerName;
+        toastParams[2] = toastClass.GetStatic<int>
+                               ("LENGTH_SHORT");
 
-        playerMoneyWin = int.Parse(intent.Call<String>("getStringExtra", "playerMoney"));
-        playerSuspicious = int.Parse(intent.Call<String>("getStringExtra", "playerSuspicious"));
-        level = int.Parse(intent.Call<String>("getStringExtra", "level"));
-        playerName = intent.Call<String>("getStringExtra", "playerName");
+        //call static function of Toast class, makeText
+        AndroidJavaObject toastObject =
+                        toastClass.CallStatic<AndroidJavaObject>
+                                      ("makeText", toastParams);
 
-        //Tenemos que poner las list de las preguntas
+        //show toast
+        toastObject.Call("show");
+
+        /*playerSuspicious = int.Parse(extras.Call<string>("getString", "playerSuspicious"));
+        level = int.Parse(extras.Call<string>("getString", "playerLevel"));
+        playerName = extras.Call<string>("getString", "playerNickname");*/
+
+        
+
+
+
+        /*//Tenemos que poner las list de las preguntas
         Debug.Log("Entro Start");
         //Ponemos los valores de el jugador
         level = 1; //Pedir al usuario la zona 
         playerTimeAvailable = 120; //Pedir al Android que tiempo tiene i que dinero tiene i suspicious
         playerMoneyWin = 1000;
         playerName = "Jaume Tabernero";
-        
+        playerSuspicious = 80;*/
+
 
 
     }
@@ -131,8 +162,8 @@ public class GameManager : MonoBehaviour
     {
 
         this.level++;
-       // AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.PlayGameActivity");
-        //playGameActivity.Call("SaveGame",this.level,playerTimeAvailable,false,playerSuspicious);
+        AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.MyUnity");
+        playGameActivity.CallStatic("SaveGame", new object[] { this.level, false, playerSuspicious ,playerMoneyWin});
                
         //Pedir a android que guarde los parametros que tenemos ahora
         tiempo = 5;
@@ -144,29 +175,41 @@ public class GameManager : MonoBehaviour
         levelImage.SetActive(false);
         doingSetup = false;
     }
-    
-    void InitGame()
+    IEnumerator InicioJuego()
     {
-        doingSetup = true;//Para evitar que las cosas se muevan i perdaos puntos ni tiempo
-        AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.PlayGameActivity");
-        String mapa = playGameActivity.Call<String>("GetMapa", this.level);
-        boardScript.mapa = mapa;
+        AndroidJavaClass MYAPI = new AndroidJavaClass("com.example.log_in_java.MyUnity");
+        mapa = MYAPI.CallStatic<string>("GetMap", new object[] { this.level });
 
+        while (mapa == null){
+
+            yield return null;
+            Debug.Log("Mapa aun null");
+        }
+
+        Debug.Log("The map is:" + mapa);
+
+        boardScript.SetMap(mapa);
+
+
+        finalImage = GameObject.Find("ImageFinal");
+        finalText = GameObject.Find("TextFinal").GetComponent<Text>() as Text;
+        congratsText = GameObject.Find("congrats");
+        finalImage.SetActive(false);
 
         dialogImage = GameObject.Find("DialogImage");
         dialogImage.SetActive(false);
-        levelImage = GameObject.Find("LevelImage");
 
+        levelImage = GameObject.Find("LevelImage");
         levelText = GameObject.Find("LevelText").GetComponent<Text>() as Text;
         nameUser = GameObject.Find("NameUser").GetComponent<Text>() as Text;
         timeUser = GameObject.Find("BoardingTime").GetComponent<Text>() as Text;
         from = GameObject.Find("From").GetComponent<Text>() as Text;
 
-        if (level==1 || level==4 || level == 7)//boardng zone
+        if (level == 1 || level == 4 || level == 7)//boarding zone
         {
             levelText.text = "Entrance Level";
         }
-        else if(level == 2 || level == 5 || level == 8)//Security zone
+        else if (level == 2 || level == 5 || level == 8)//Security zone
         {
             levelText.text = "Security Level";
         }
@@ -179,7 +222,7 @@ public class GameManager : MonoBehaviour
         {
             from.text = "Frankfurt";
         }
-        else if (level<=6 && level>3)
+        else if (level <= 6 && level > 3)
         {
             from.text = "New York";
         }
@@ -192,7 +235,7 @@ public class GameManager : MonoBehaviour
         timeUser.text = playerTimeAvailable.ToString();
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
-        
+
         textTime = GameObject.FindWithTag("Time").GetComponent(typeof(Text)) as Text;
         textMoney = GameObject.FindWithTag("Money").GetComponent(typeof(Text)) as Text;
         textInfo = GameObject.FindWithTag("Info").GetComponent(typeof(Text)) as Text;
@@ -205,6 +248,13 @@ public class GameManager : MonoBehaviour
         cleaners.Clear();
         boardScript.Start();
         boardScript.SetUpScene();
+    }
+ 
+    
+    void InitGame()
+    {
+        doingSetup = true;//Para evitar que las cosas se muevan i perdaos puntos ni tiempo
+        StartCoroutine(InicioJuego());
     }
 
     IEnumerator MoveEnemies()
@@ -234,21 +284,29 @@ public class GameManager : MonoBehaviour
     {
         if (!doingSetup)
         {
-            StartCoroutine(MoveEnemies());
             textTime.text = playerTimeAvailable.ToString();
             textMoney.text = playerMoneyWin.ToString();
             textInfo.text = enemyQuote;
 
             if (playerTimeAvailable <= 0)
                 GameOver();
-
-
         }
+       
        
     }
     
     public void GameOver()//Que hacer cuando finalize el juego
     {
+        //Tenemos que enviar la info a la base de Datos 
+
+        //Abrir la activity de fin de partida i volver 
+
+        finalImage.SetActive(true);
+        congratsText.SetActive(false);
+        finalText.fontSize = 200;
+        finalText.text = "GAME OVER";
+        Invoke("AndroidFinalCall", levelStartDelay);
+
 
     }
     
@@ -271,7 +329,7 @@ public class GameManager : MonoBehaviour
                 GameOver();
             }
 
-
+            StartCoroutine(MoveEnemies());
 
         }
 
@@ -355,7 +413,12 @@ public class GameManager : MonoBehaviour
     {
         questionText = GameObject.Find("Question").GetComponent<Text>() as Text;
         questionText.text = questions[numQuestion];
-        randomanswer = UnityEngine.Random.Range(0, 1);
+        if (numQuestion < 5)
+        {
+            randomanswer = UnityEngine.Random.Range(0, 4);
+        }
+        else
+            randomanswer = 1;
     }
 
     public void EndSecurity()
@@ -363,13 +426,24 @@ public class GameManager : MonoBehaviour
         dialogImage.SetActive(false);
         doingSetup = false;
         SceneManager.LoadScene(0);
-
     }
 
 
     internal void YesPulsed()
     {
         //Hem de fer algo amb el temps per perdre de manera aleatoria segons supicious
+        if (randomanswer < 3)
+        {
+            randomanswer = 1;
+        }
+        else
+        {
+            randomanswer = 0;
+        }
+
+        int timeToSubstract = Mathf.RoundToInt(48* playerSuspicious * 0.01f * (1-randomanswer));
+        playerTimeAvailable = playerTimeAvailable - timeToSubstract;
+        textTime.text = playerTimeAvailable.ToString();
 
         if (numeroQuestion + 1 < 5)
         {
@@ -385,8 +459,20 @@ public class GameManager : MonoBehaviour
     }
     internal void NoPulsed()
     {
+        if (randomanswer >= 3)
+        {
+            randomanswer = 0;
+        }
+        else
+        {
+            randomanswer = 1;
+        }
+
         //Hem de fer algo per el temps de perdre de manera aleatoria temps
-        
+        int timeToSubstract = Mathf.RoundToInt(48 * playerSuspicious * 0.01f * (randomanswer));
+        playerTimeAvailable = playerTimeAvailable - timeToSubstract;
+        textTime.text = playerTimeAvailable.ToString();
+
         if (numeroQuestion + 1 < 5)
         {
             numeroQuestion++;
@@ -396,15 +482,32 @@ public class GameManager : MonoBehaviour
         {
             EndSecurity();
         }
-
-
-
     }
 
 
     public void FinalGame()//Acciones hacer cuando finalizamos el juego
     {
+        finalImage.SetActive(true);
+        congratsText.SetActive(true);
+        finalText.fontSize = 90;
+        finalText.text = "WELCOME ON BOARD";
+        //Volver al menu inicial de android
+        Invoke("AndroidFinalCall", levelStartDelay);
 
+    }
+    public void AndroidFinalCall()
+    {
+        AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.MyUnity");
+        playGameActivity.CallStatic("FinalGame",new object[] { this.level, false, playerSuspicious, playerMoneyWin, playerName });
+        Application.Quit();
+
+    }
+    public void AndroidGameOverCall()
+    {
+        AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.MyUnity");
+        playGameActivity.CallStatic("GameOver");
+
+        Application.Quit();
     }
 
 

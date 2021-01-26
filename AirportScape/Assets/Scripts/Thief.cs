@@ -19,12 +19,12 @@ public class Thief : MonoBehaviour
         animator = GetComponent<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rb2D = GetComponent<Rigidbody2D>();
-        speed = 8;
+        speed = 2;
         interaction = false;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!GameManager.instance.doingSetup)
         {

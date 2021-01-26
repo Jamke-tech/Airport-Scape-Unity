@@ -21,11 +21,6 @@ public class PlayerController : MonoBehaviour
 
     public Joystick joy;
 
-
-
-
-
-
     // Start is called before the first frame update
     public void Start()
     {
@@ -34,7 +29,7 @@ public class PlayerController : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
         inverseMoveTime = 1f / moveTime;
-        velocidad = 30;
+        velocidad = 6;
         joy = GameObject.FindWithTag("Joystick").GetComponent(typeof(Joystick)) as Joystick;
         
 
@@ -47,7 +42,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!GameManager.instance.doingSetup)
         {

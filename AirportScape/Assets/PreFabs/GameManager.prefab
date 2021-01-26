@@ -45,11 +45,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelStartDelay: 3
+  randomanswer: 0
   doingSetup: 0
   boardScript: {fileID: 0}
   follwingCamera: {fileID: 0}
+  level: 0
   playerTimeAvailable: 120
   playerMoneyWin: 0
+  playerSuspicious: 0
   turnDelay: 0.1
   textTime: {fileID: 0}
   textMoney: {fileID: 0}
@@ -68,8 +71,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785ccc3f2d371d547b638f2ca4624b24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 40
-  rows: 20
+  columns: 70
+  rows: 30
   floorTiles:
   - {fileID: 5957757960710327514, guid: 6063f31639c66bc48844b98bfd8af1cf, type: 3}
   perimetralFloor:
@@ -115,3 +118,6 @@ MonoBehaviour:
   fence: {fileID: 7955030711698851217, guid: 2ee79e6f208c4754bba9aa5d44f66f9a, type: 3}
   nextLevelSignal: {fileID: 575497123051052994, guid: e7efd2f524cb34b45841ccf494a27d7a,
     type: 3}
+  finalGameSignal: {fileID: 7185817627952400760, guid: da0cd6e94b0409c47ae94a1e38f25b9b,
+    type: 3}
+  mapa: 

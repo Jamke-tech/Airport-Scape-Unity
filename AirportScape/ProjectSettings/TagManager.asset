@@ -19,6 +19,7 @@ TagManager:
   - Next
   - Dialog
   - Security
+  - Final
   layers:
   - Default
   - TransparentFX

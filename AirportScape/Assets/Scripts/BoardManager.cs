@@ -17,8 +17,8 @@ public class BoardManager : MonoBehaviour
             maximum = max;
         }
     }
-    public int columns = 20;
-    public int rows = 40;
+    public int columns = 30;
+    public int rows = 70;
     public GameObject[] floorTiles;
     public GameObject[] perimetralFloor;
     public GameObject[] enemyTiles;
@@ -41,6 +41,7 @@ public class BoardManager : MonoBehaviour
     public GameObject secretWall;
     public GameObject fence;
     public GameObject nextLevelSignal;
+    public GameObject finalGameSignal;
 
     private GameObject mainCamera;
 
@@ -48,12 +49,16 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> gridPositionsCleanerPart1 = new List<Vector3>(); //To places the tiles
 
 
-    public String mapa;
+    public string mapa;
 
     public void Start()
     {
         //Buscamos la camara principal para asi poder assignar el personaje
         mainCamera = GameObject.FindWithTag("MainCamera");
+    }
+    public void SetMap(string mapa)
+    {
+        this.mapa = mapa;
     }
 
 
@@ -65,7 +70,7 @@ public class BoardManager : MonoBehaviour
         boardHolder.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GameObject playerinstance = new GameObject("Player");
         //String mapa;
-        if (GameManager.instance.level == 1)
+        /*if (GameManager.instance.level == 1)
         {
             mapa = "40 20\r\n"
             + "########################################\r\n"
@@ -86,8 +91,73 @@ public class BoardManager : MonoBehaviour
             + "# B B B   B B B B  V#V                 #\r\n"
             + "#C                  #                 I#\r\n"
             + "# B B B B B B B B  V#V                 #\r\n"
-            + "#                   #                E #\r\n"
+            + "#                   #                F #\r\n"
             + "########################################\r\n";
+            mapa = "50 30\r\n"
+            + "##################################################\r\n"
+            + "#                        p#                      #\r\n"
+            + "#            i           p#           m      T   #\r\n"
+            + "#                        p#                      #\r\n"
+            + "#                                               p#\r\n"
+            + "#                                               p#\r\n"
+            + "#b                       p#                     p#\r\n"
+            + "# B B B B     B B B      p#                      #\r\n"
+            + "#                      C  #                      #\r\n"
+            + "# B B B B B B B B B       #                 P    #\r\n"
+            + "# b                    C  #         I            #\r\n"
+            + "###########S###############                      #\r\n"
+            + "#  p p p p p p p p p p p p                       #\r\n"
+            + "#V                                     a         #\r\n"
+            + "#    P                                           #\r\n"
+            + "#V                       B B B       B B B B B B #\r\n"
+            + "#                                                #\r\n"
+            + "#V  C                    B B B       B B B B B B #\r\n"
+            + "#                                                #\r\n"
+            + "#b                       B B B       B B B B B B #\r\n"
+            + "#vvvvvvvvvvvvvvvvvvvv    vvvvvvvvvvvvvvvvvvvvvvvv#\r\n"
+            + "#    C                                           #\r\n"
+            + "#V                                               #\r\n"
+            + "#   B B B B B B  b                     d         #\r\n"
+            + "#V                                               #\r\n"
+            + "#   B B B B B B  b                           S   #\r\n"
+            + "#V   C                                       S   #\r\n"
+            + "#   B B B B B B  b                               #\r\n"
+            + "#b                                              E#\r\n"
+            + "##################################################\r\n";
+            mapa = "70 30\r\n"
+
++ "######################################################################\r\n"
++ "#pppppppppppppppp#                   #         Vp                  E #\r\n"
++ "#I          V   V#                              p                    #\r\n"
++ "#                #                   #         Vp                    #\r\n"
++ "#           V   V#               s   #          p            C       #\r\n"
++ "#         C      #                   #         Vp                    #\r\n"
++ "#           V   V#              C    #          p                    #\r\n"
++ "#                #                   #         Vp    i     i         #\r\n"
++ "#      s    V   V#            i      #     C    p                    #\r\n"
++ "#                #        P          #         Vp                    #\r\n"
++ "#           V   V#                   #          p         s          #\r\n"
++ "# C              #                  b#         Vp              m     #\r\n"
++ "#                #vvv vvvvvvvvvvvvvvv#          p                   b#\r\n"
++ "#           s    #     pppppppppppppp#         Vp         Vp        V#\r\n"
++ "#                #            C      #    P     p C        p         #\r\n"
++ "#     d          #                   #         Vp         Vp        V#\r\n"
++ "#                #    s              #          p          p         #\r\n"
++ "#p               #                   #                    Vp        V#\r\n"
++ "#                #                   #     T               p         #\r\n"
++ "#      s         #     P             #                    Vp        V#\r\n"
++ "#                #                   #              C      p         #\r\n"
++ "#               s#                  b#   P                Vp    P   V#\r\n"
++ "# B B B B B      #vvvvvvvvvvvvv vvvvv#                     p         #\r\n"
++ "#                #ppppppppppppp      #               C    Vp        V#\r\n"
++ "# B B B B Bb     #                   #                     p         #\r\n"
++ "#                S                 P #                    Vp        V#\r\n"
++ "# B B B B B      #                   #        P            p         #\r\n"
++ "#                #                   #                    Vp        V#\r\n"
++ "#pppppppppppppppp#                   #                     p         #\r\n"
++ "######################################################################\r\n";
+
+
         }
         else if(GameManager.instance.level==2)
         {
@@ -102,6 +172,22 @@ public class BoardManager : MonoBehaviour
             + "#        vvvvv#\r\n"
             + "# Y          x#\r\n"
             + "###############\r\n";
+            mapa = "30 15\r\n"
++ "##############################\r\n"
++ "#   S  S      Y            x #\r\n"
++ "#                            #\r\n"
++ "#p                          p#\r\n"
++ "#p                          p#\r\n"
++ "#p                          p#\r\n"
++ "#                            #\r\n"
++ "# C                          #\r\n"
++ "#vvvvvvvvvvv  vvvvvvvvvvvvvvv#\r\n"
++ "#         S    S            p#\r\n"
++ "#                           b#\r\n"
++ "#                 B B B B B  #\r\n"
++ "#                            #\r\n"
++ "#I                B B B B B  #\r\n"
++ "##############################\r\n";
         }
         else
         {
@@ -124,9 +210,30 @@ public class BoardManager : MonoBehaviour
             + "# B B B   B B B B  V#V                 #\r\n"
             + "#C                  #                 I#\r\n"
             + "# B B B B B B B B  V#V                 #\r\n"
-            + "#                   #                E #\r\n"
+            + "#                   #                F #\r\n"
             + "########################################\r\n";
-        }
+            mapa = "70 20\r\n"
++ "######################################################################\r\n"
++ "#                    #     T           #                            F#\r\n"
++ "#            a       #                 # C                           #\r\n"
++ "#                   p#                 #                             #\r\n"
++ "# B B B B            #                 #                    B B B B  #\r\n"          
++ "#                   p#                                               #\r\n"
++ "# B B B B            #                 #                    B B B B  #\r\n"
++ "#                   p#               p #                             #\r\n"
++ "#                                    p # P                           #\r\n"
++ "#                    #               p #                             #\r\n"
++ "#P                   #               p #                        d    #\r\n"
++ "#                    ########s##########                             #\r\n"
++ "#p       b B B B B B #                                             V #\r\n"
++ "#                  C #  C                                            #\r\n" 
++ "#p       b B B B B B #    B B B B B B B                            V #\r\n"  
++ "#                  C #                                               #\r\n"                   
++ "#p       b B B B B B #    B B B B B B B              P    i        V #\r\n"
++ "#                    #                                               #\r\n"
++ "#I                   #  p  p  p  p  p  p  p  p  p  p  p  p  p  p  p  #\r\n"
++ "######################################################################\r\n";
+        }*/
 
         mapa = mapa.Replace("\r\n", "\n");
         String[] maplines = mapa.Split('\n');
@@ -205,6 +312,11 @@ public class BoardManager : MonoBehaviour
                     case 'E'://Exit to next level
                         GameObject instanceexit =Instantiate(nextLevelSignal, new Vector3(x, rows - y, 0f), Quaternion.identity) as GameObject;
                         instanceexit.transform.SetParent(boardHolder);
+                        intantiateFloor(x, rows - y, rows, columns);
+                        break;
+                    case 'F'://Exit to next level
+                        GameObject instancefinal = Instantiate(finalGameSignal, new Vector3(x, rows - y, 0f), Quaternion.identity) as GameObject;
+                        instancefinal.transform.SetParent(boardHolder);
                         intantiateFloor(x, rows - y, rows, columns);
                         break;
 

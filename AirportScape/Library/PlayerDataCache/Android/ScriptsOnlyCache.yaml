@@ -14,9 +14,11 @@ ScriptsOnlyBuild:
     - Thief
     GitHub.Unity.45.dll:
     - GitHub.Unity.ApplicationCache
+    - GitHub.Unity.BranchesCache
     - GitHub.Unity.EnvironmentCache
     - GitHub.Unity.GitAheadBehindCache
     - GitHub.Unity.GitLocksCache
+    - GitHub.Unity.GitLogCache
     - GitHub.Unity.GitStatusCache
     - GitHub.Unity.RepositoryInfoCache
     - GitHub.Unity.Window
@@ -205,7 +207,7 @@ ScriptsOnlyBuild:
     className: Decoration
   - hash:
       serializedVersion: 2
-      Hash: 76061ae1b959e841a7dc2521e61e41a4
+      Hash: 57137e44b7757c8e1e31ecdff86802f9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -901,7 +903,7 @@ ScriptsOnlyBuild:
     className: Dropdown
   - hash:
       serializedVersion: 2
-      Hash: 65e211543ef943a22d72bb4873cb5f5c
+      Hash: 58223f245ca2be6e5452bac83f46939a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: BoardManager
@@ -956,4 +958,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: D:/4t_CARRERA/4A/DSA/PROJECT/UnityAndroid
+  playerPath: D:/4t_CARRERA/4A/DSA/PROJECT/Unitysdk
