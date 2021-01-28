@@ -498,16 +498,24 @@ public class GameManager : MonoBehaviour
     public void AndroidFinalCall()
     {
         AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.MyUnity");
-        playGameActivity.CallStatic("FinalGame",new object[] { this.level, false, playerSuspicious, playerMoneyWin, playerName });
-        Application.Quit();
+        Debug.Log("Final de la Partida");
+        playGameActivity.CallStatic("FinalGame",new object[] { this.level, true, playerSuspicious, playerMoneyWin, playerName });
 
+        Invoke("QuitApplication", 2f);
     }
+
+    public void QuitApplication()
+    {
+        Application.Quit();
+    }
+
     public void AndroidGameOverCall()
     {
         AndroidJavaClass playGameActivity = new AndroidJavaClass("com.example.log_in_java.MyUnity");
+        Debug.Log("Game Over");
         playGameActivity.CallStatic("GameOver");
+        Invoke("QuitApplication", 2f);
 
-        Application.Quit();
     }
 
 
